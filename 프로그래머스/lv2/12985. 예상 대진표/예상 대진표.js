@@ -1,19 +1,9 @@
-/**
-
-*/
 function solution(n,a,b)
 {
-    let answer = 1;
-    if(a>b) {
-        let temp = a;
-        a = b;
-        b = temp;
-    }
-    while(true) {
-        if(b-a === 1 && a%2!==0 && b%2===0) break;
-        a = Math.ceil(a/2);
-        b = Math.ceil(b/2);
-        answer += 1;
-    }
+    var answer = 0;
+
+    // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+    console.log('Hello Javascript')
+
     return answer;
 }
