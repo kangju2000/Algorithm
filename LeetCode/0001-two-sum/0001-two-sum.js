@@ -8,9 +8,11 @@ var twoSum = function (nums, target) {
 
   for (let i = 0; i < nums.length; i++) {
     if (obj[nums[i]] !== undefined) {
-      return i > obj[nums[i]] ? [obj[nums[i]], i] : [i, obj[nums[i]]];
+      return [obj[nums[i]], i]
     }
 
     obj[target - nums[i]] = i
   }
+
+  return []
 };
