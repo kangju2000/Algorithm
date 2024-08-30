@@ -3,12 +3,14 @@
  * @param {number} target
  * @return {number[]}
  */
-var twoSum = function(nums, target) {
-    for(let i = 0; i < nums.length - 1; i++) {
-        for(let j = i + 1; j < nums.length; j++) {
-            if(nums[i] + nums[j] === target) {
-                return [i, j]
-            }
-        }
+var twoSum = function (nums, target) {
+  const obj = {};
+
+  for (let i = 0; i < nums.length; i++) {
+    if (obj[nums[i]] !== undefined) {
+      return i > obj[nums[i]] ? [obj[nums[i]], i] : [i, obj[other]];
     }
+
+    obj[target - nums[i]] = i
+  }
 };
