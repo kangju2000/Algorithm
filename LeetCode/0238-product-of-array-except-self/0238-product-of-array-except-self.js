@@ -3,29 +3,28 @@
  * @return {number[]}
  */
 var productExceptSelf = function (nums) {
-  let zeroCount = [];
-  const product = nums.reduce((acc, cur, index) => {
-    if (cur === 0) {
-      zeroCount.push({ index });
-      return acc;
+  const left = [];
+  const right = [];
+
+  nums.forEach((num) => {
+    if (left.length === 0) {
+      left.push(num);
+      return;
     }
 
-    return acc * cur;
-  }, 1);
+    left.push(left[left.length - 1] * num);
+  });
 
-  if (zeroCount.length > 1) {
-    return Array.from({ length: nums.length }).fill(0);
-  }
+  nums.reverse().forEach((num) => {
+    if (right.length === 0) {
+      right.push(num);
+      return;
+    }
 
-  if (zeroCount.length === 1) {
-    return nums.map((num, index) => {
-      if (index === zeroCount[0].index) {
-        return product;
-      }
+    right.push(right[right.length - 1] * num);
+  });
 
-      return 0;
-    });
-  }
-
-  return nums.map((num) => product / num);
+  return nums.map((num, index) => {
+    return (left[index - 1] ?? 1) * (right[nums.length - 2 - index] ?? 1)
+  })
 };
