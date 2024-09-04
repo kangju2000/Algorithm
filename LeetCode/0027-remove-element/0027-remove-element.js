@@ -19,12 +19,10 @@ var removeElement = function (nums, val) {
             }
             nums[left] = nums[right];
             nums[right] = val;
-        } else {
-            left++;
         }
+        
+        left++;
     }
-
-    console.log({ left, right, nums })
 
     return left;
 };
