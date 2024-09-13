@@ -6,7 +6,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-let input;
+const input = [];
 
 rl.on("line", function (line) {
   // input = line.trim().split(" ").map(Number);
