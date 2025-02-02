@@ -1,59 +1,3 @@
-function solution(input) {
-  const [T, ...TCList] = input;
-
-  const gridList = [];
-  const cabbageList = [];
-
-  for (let i = 0; i < TCList.length; i++) {
-    if (TCList[i].length === 3) {
-      const [rows, cols, total] = TCList[i];
-      cabbageList.push([]);
-      gridList.push(
-        Array.from({ length: rows }, () => Array.from({ length: cols }).fill(0))
-      );
-      continue;
-    }
-
-    cabbageList[cabbageList.length - 1].push(TCList[i]);
-    const [x, y] = TCList[i];
-    gridList[gridList.length - 1][x][y] = 1;
-  }
-
-  gridList.forEach((grid, index) => {
-    const visited = new Set();
-    let count = 0;
-
-    cabbageList[index].forEach(([x, y]) => {
-      if (!visited.has(`${x},${y}`)) {
-        count += 1;
-        dfs(grid, x, y, visited);
-      }
-    });
-
-    console.log(count);
-  });
-}
-
-function dfs(grid, x, y, visited = new Set()) {
-  if (
-    x < 0 ||
-    y < 0 ||
-    x >= grid.length ||
-    y >= grid[0].length ||
-    visited.has(`${x},${y}`) ||
-    grid[x][y] === 0
-  ) {
-    return;
-  }
-
-  visited.add(`${x},${y}`);
-
-  dfs(grid, x + 1, y, visited);
-  dfs(grid, x - 1, y, visited);
-  dfs(grid, x, y + 1, visited);
-  dfs(grid, x, y - 1, visited);
-}
-
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -61,10 +5,67 @@ const rl = readline.createInterface({
 });
 
 const input = [];
+let lineCount = 0;
 
-rl.on("line", function (line) {
-  input.push(line.trim().split(" ").map(Number));
-}).on("close", function () {
-  solution(input);
+function processInput(line) {
+  if (lineCount === 0) {
+    lineCount++;
+    return;
+  }
+
+  const arr = line.split(" ").map(Number);
+  if (arr.length === 3) {
+    input.push([arr]);
+    return;
+  }
+
+  input[input.length - 1].push(arr);
+}
+
+rl.on("line", processInput).on("close", () => {
+  solution();
   process.exit();
 });
+
+function solution() {
+  const tResult = [];
+  for (const tc of input) {
+    const [[M, N, K], ...pos] = tc;
+
+    const grid = Array.from({ length: M }, () =>
+      Array.from({ length: N }, () => 0)
+    );
+
+    for (const [i, j] of pos) {
+      grid[i][j] = 1;
+    }
+
+    let count = 0;
+
+    const dfs = (i = 0, j = 0) => {
+      if (i < 0 || i >= M || j < 0 || j >= N) {
+        return;
+      }
+
+      if (grid[i][j] === 1) {
+        grid[i][j] = -1;
+        dfs(i, j + 1);
+        dfs(i, j - 1);
+        dfs(i + 1, j);
+        dfs(i - 1, j);
+      }
+    };
+
+    for (let i = 0; i < M; i++) {
+      for (let j = 0; j < N; j++) {
+        if (grid[i][j] === 1) {
+          dfs(i, j);
+          count += 1;
+        }
+      }
+    }
+    tResult.push(count);
+  }
+
+  console.log(tResult.join("\n"));
+}
