@@ -1,19 +1,3 @@
-function solution(input) {
-  const [N, M] = input[0];
-  const arr = input[1];
-
-  const sumList = [0];
-
-  for (let i = 0; i < N; i++) {
-    sumList.push(sumList[i] + arr[i]);
-  }
-
-  for (let i = 0; i < M; i++) {
-    const [left, right] = input[i + 2];
-    console.log(sumList[right] - sumList[left - 1]);
-  }
-}
-
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -22,9 +6,32 @@ const rl = readline.createInterface({
 
 const input = [];
 
-rl.on("line", function (line) {
-  input.push(line.trim().split(" ").map(Number));
-}).on("close", function () {
-  solution(input);
+function processInput(line) {
+  input.push(line.split(" ").map(Number));
+}
+
+rl.on("line", processInput).on("close", () => {
+  solution();
   process.exit();
 });
+
+function solution() {
+  const [, arr, ...ijList] = input;
+
+  const accSum = arr.reduce((acc, curr) => {
+    if (acc.length === 0) {
+      acc.push(curr);
+    } else {
+      acc.push(acc[acc.length - 1] + curr);
+    }
+
+    return acc;
+  }, []);
+
+  const result = [];
+  for (const [i, j] of ijList) {
+    result.push((accSum[j - 1] ?? 0) - (accSum[i - 2] ?? 0));
+  }
+
+  console.log(result.join("\n"));
+}
